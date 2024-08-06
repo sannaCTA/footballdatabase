@@ -1,0 +1,114 @@
+CREATE TABLE coach (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                     first_name TEXT, 
+                     last_name TEXT); 
+
+INSERT INTO coach (first_name, last_name) VALUES ('Thomas', 'Crabtree');
+
+CREATE TABLE age_group (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        age_range TEXT); 
+                        
+INSERT INTO age_group (age_range) VALUES ('under 9s'); 
+
+CREATE TABLE team (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    team_name TEXT, 
+                    coach_id INTEGER, 
+                    age_group_id INTEGER, 
+                FOREIGN KEY (coach_id) REFERENCES coach(id), 
+                FOREIGN KEY (age_group_id) REFERENCES age_group(id)); 
+                
+INSERT INTO team (team_name, coach_id, age_group_id) VALUES ('Manchester United', 1, 1);                         
+
+
+CREATE TABLE player (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    first_name TEXT, 
+                    last_name TEXT, 
+                    team_id INTEGER, 
+                    FOREIGN KEY (team_id) REFERENCES team(id)); 
+                    
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Marcus', 'Rashford', 1); 
+
+CREATE TABLE parent_carer (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    first_name TEXT, 
+                    last_name TEXT);  
+                    
+INSERT INTO parent_carer (first_name, last_name) VALUES ('Thomas', 'Crabtree'); 
+
+CREATE TABLE relationship (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                            parent_carer_id INTEGER, 
+                            player_id INTEGER,
+                            FOREIGN KEY (parent_carer_id) REFERENCES parent_carer(id), 
+                            FOREIGN KEY (player_id) REFERENCES player(id)); 
+                                    
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (1, 1); 
+
+INSERT INTO coach (first_name, last_name) VALUES ('Erik', 'Ten Hag'); 
+INSERT INTO coach (first_name, last_name) VALUES ('Sarina', 'Wiegman'); 
+INSERT INTO coach (first_name, last_name) VALUES ('Emma', 'Hayes'); 
+INSERT INTO coach (first_name, last_name) VALUES ('Carlo', 'Ancelotti'); 
+INSERT INTO age_group (age_range) VALUES ('under 12s');
+INSERT INTO age_group (age_range) VALUES ('under 15s');
+INSERT INTO age_group (age_range) VALUES ('under 18s');
+INSERT INTO team (team_name, coach_id, age_group_id) VALUES ('Real Madrid', 1, 4);  
+INSERT INTO team (team_name, coach_id, age_group_id) VALUES ('England (Women)', 3, 4);  
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Sanna', 'Mahmood', 1);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Leah', 'Williamson', 1);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Ella', 'Toone', 1);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Alejandro', 'Garnacho', 1);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Cristiano', 'Ronaldo', 2);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Gareth', 'Bale', 2);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Sergio', 'Ramos', 2);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Jude', 'Bellingham', 2);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Kylian', 'Mbappe', 2);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Mary', 'Earps', 3);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Lucy', 'Bronze', 3);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Keira', 'Walsh', 3);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Georgia', 'Stanway', 3);
+INSERT INTO player (first_name, last_name, team_id) VALUES ('Rachel', 'Daly', 3);
+                    
+INSERT INTO parent_carer (first_name, last_name) VALUES ('Carlo', 'Ancelotti'); 
+INSERT INTO parent_carer (first_name, last_name) VALUES ('Big', 'Ben');
+INSERT INTO parent_carer (first_name, last_name) VALUES ('Mr', 'Bean');  
+UPDATE team SET age_group_id = 3 WHERE id = 3;
+
+CREATE TABLE relationship (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                            parent_carer_id INTEGER, 
+                            player_id INTEGER,
+                            FOREIGN KEY (parent_carer_id) REFERENCES parent_carer(id), 
+                            FOREIGN KEY (player_id) REFERENCES player(id)); 
+                                    
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (1, 1); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (1, 2); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (4, 1); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (1, 3); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (2, 4); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (2, 5); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (3, 6); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (1, 7); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (4, 8);
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (4, 9);  
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (1, 10); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (3, 11); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (4, 12); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (1, 13);
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (2, 14); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (2, 15); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (3, 15); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (2, 10); 
+INSERT INTO relationship (parent_carer_id, player_id) VALUES (4, 4); 
+
+SELECT first_name, team_name
+FROM player
+JOIN team
+ON team.id = player.team_id; 
+
+SELECT first_name, last_name, COUNT(relationship.parent_carer_id)
+FROM parent_carer
+JOIN relationship 
+ON parent_carer.id = relationship.parent_carer_id
+GROUP BY parent_carer_id
+ORDER BY COUNT(relationship.parent_carer_id) DESC;
+
+SELECT first_name, last_name, team_name
+FROM coach
+JOIN team
+ON coach.id = team.coach_id; 
